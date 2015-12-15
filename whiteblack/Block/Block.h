@@ -7,38 +7,40 @@
 ///マップにはプレイヤーのposとsizeとvecの
 ///情報でblockにどれだけめり込んだかを返す関数を作る
 
-
-class Block 
-{
-public:
-    Block();
-    void update();
-    void draw();
-    void setup();
-
-    void setPos(Vec2f _pos);
-    void setStatus(BLOCK _block);
-
-	int type;
-	Vec2f start_pos = Vec2f(0, 0);
-	Vec2f draw_pos = Vec2f(200, 200);
-
-    Vec2f Collision(Object _player ,
-        BLOCK _up, BLOCK _down,
-        DIRECTION _direction,
-        int move_vector);
-
-private:
-    BLOCK status;
-    Object block;
-    
-
-    /////////////////////吉雄//変数///////////////////////
-
-
-
-    //////////////////////小松//変数/////////////////////////
-
-
-
-};
+//
+//class Block 
+//{
+//public:
+//
+//    Block();
+//    void update();
+//    void draw();
+//    void setup();
+//
+//    void setPos(Vec2f _pos);
+//    void setStatus(BLOCK _block);
+//
+//	Vec2f start_pos = Vec2f(0, 0);
+//	Vec2f draw_pos = Vec2f(200, 200);
+//
+//    Vec2f Collision(Object _player ,
+//        BLOCK _up, BLOCK _down,
+//        DIRECTION _direction = DIRECTION::NON,
+//        int move_vector = 0);
+//
+//    BLOCK getBlockStatus();
+//
+//private:
+//    BLOCK status;
+//    Object block;
+//    
+//
+//    /////////////////////吉雄//変数///////////////////////
+//
+//
+//
+//    //////////////////////小松//変数/////////////////////////
+//
+//
+//
+//};

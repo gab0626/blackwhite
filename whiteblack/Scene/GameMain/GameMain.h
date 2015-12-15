@@ -14,5 +14,7 @@ public:
 private:
     Map map;
     Player player;
+    
+
 };
 

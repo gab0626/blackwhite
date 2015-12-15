@@ -15,8 +15,8 @@ enum class DIRECTION
 //ブロックの大きさ
 enum class BLOCKSIZE
 {
-    WIDTH = 150,
-    HEIGTH = 200
+    WIDTH = 100,
+    HEIGHT = 100
 };
 //画面大きさ
 enum WINDOW
@@ -34,20 +34,21 @@ enum class SCENE
 //ブロックの種類
 enum class BLOCK
 {
-	NULLBLOCK = 0,
-    NORMAL_ = 1,
-    WHITE = 2,
-    BLACK_ =3,
-    MOVE_=4,
-    FALL_=5,
-    DOUBLE_W = 6,
-    DOUBLE_B = 7,
+    NORMAL = 1,
+    
+    MOVE,
+    FALL,
+    DOUBLE,
+
+    PLAYER_START_POS =10
 
 };
 //プレイヤーの状態
 enum class CONDITION{
     BLACK,
-    WHITE
+    WHITE,
+	STRIPE,
+    NONE
 };
 
 

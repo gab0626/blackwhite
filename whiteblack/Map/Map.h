@@ -1,21 +1,10 @@
-#include "../Top/Top.h"
-#include "../Block/Block.h"
-/////ウッティーーー
-///マップにはプレイヤーのposとsizeとvecの
-///情報でblockにどれだけめり込んだかを返す関数を作る
-//実際にblockにその情報を経由するんだけど
-//その情報プラス上と下に何のブロックがあるのか
-//も渡してあげる
-//blockがどんなブロックなのかを初期化する
-//初期化はとりあえずtxtでやろうと思う
-//マップの描画はゲームメインさんでトランスレートする
-//マップのサイズとブロックの種類は定数で用意してあるので使って
-//後でマップのマスの数は変えれるように汎用性を持たせてブロックをインスタンス化する
-//playerのポジションから選択の選択されているマス目を視覚化しないといけない
-//プレイヤーからどのマスを選択しているかの情報をVec2iであげるでプレイヤーの中心から
-//ブロックサイズを掛けてそのマス目にdrawBoxでもいいからしておいてね
-//情報が多すぎるからObjectの構造体で受け取ってね
 
+#include "../Top/Top.h"
+#include "../Block/BlockBase.h"
+#include "../Block/BlockCategory/NormalBlock.h"
+#include "../Block/BlockCategory/MoveBlock.h"
+#include "../Block/BlockCategory/FallBlock.h"
+#include "../Block/BlockCategory/DoubleBlock.h"
 
 
 
@@ -25,9 +14,37 @@ public:
     Map();
     void update();
     void draw();
-    void setup();
+	//プレイするstageの番号を引数にください
+    void setup(int);
+
+	Vec2f getPlayerStartPos() const;
+
+	//struct型のplayerとplayerのconditionを引数でもらって
+	//blockにめり込んだ文の値を(＋)の値で返します
+	Vec2f isHitPlayerToBlock(Object, CONDITION);
+
+	void isHitMoveBlockToBlock();
+
+	//選択されているマップチップの座標を引数で獲得して
+	//枠を光らせる
+	void selected(Vec2i);
+
+	//選択されているマップチップの座標を
+	//引数で獲得して吸収します
+	bool sucked(Vec2i);
+
+	//選択されているマップチップの座標を
+	//引数で獲得して放出します
+	bool released(Vec2i);
 
 private:
+
+	std::vector<std::vector<BlockBase*>> map_chip;
+	Vec2f player_start_pos;
+
+	void mapDelete();
+
+    Vec2f collsion(Object player, Object block, bool, bool);
     
 };
 
