@@ -33,10 +33,10 @@ void FallBlock::update()
 		block.pos.y() += block.vec.y();
 	}
 
-	if (block.pos.y() <= (-WINDOW::HEIGHT / 2) - block.size.y() * 5)
+	/*if (block.pos.y() <= (env.viewSize.y() / 2) - block.size.y() * 5)
 	{
 		fall_flag = false;
-	}
+	}*/
 }
 
 void FallBlock::draw()

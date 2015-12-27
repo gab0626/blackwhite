@@ -69,7 +69,7 @@ class App
 public:
     static AppEnv& get()
     {
-        static AppEnv env(WIDTH, HEIGHT/*, false, true*/);
+        static AppEnv env(WIDTH, HEIGHT, false, true);
 
         return env;
     }

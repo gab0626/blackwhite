@@ -12,6 +12,8 @@ public:
 	void draw();
 	void setup();
 
+	bool getMoveFlag(){ return move_flag; }
+
 private:
 
 };

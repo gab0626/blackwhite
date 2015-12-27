@@ -20,7 +20,11 @@
 enum class SELECTDIR{
 	Y,
 	X,
+	NON_Y0,
+	NON_Y1,
 	NON
+	
+
 };
 
 
@@ -32,6 +36,7 @@ public:
     void draw();
     void setup(Vec2f pos);
 	void move();
+	void conditionUpdate();
 	void dirUpdate(SELECTDIR&);
 	void animation();
 	SELECTDIR select_dir;
@@ -56,6 +61,8 @@ private:
 	int ColorMax;
 	int animation_count;
 	float cut_x;
+	float cut_y;
+    int fream;
     Object player;
 	Vec2i selection;
 	Vec2i p_pos;

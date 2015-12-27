@@ -6,8 +6,9 @@ Player::Player(){
 }
 
 void Player::update(){
+	conditionUpdate();
 	move();
-
+	//std::cout << color_abs << std::endl;
 }
 
 void Player::draw(){
@@ -20,7 +21,7 @@ void Player::draw(){
 			player.size.x(),
 			player.size.y(),
 			0 + cut_x,
-			0,
+			0 + cut_y,
 			256,
 			256,
 			player_texture,
@@ -37,7 +38,7 @@ void Player::draw(){
 			player.size.x(),
 			player.size.y(),
 			0 + cut_x,
-			0,
+			0 + cut_y,
 			256,
 			256,
 			player_texture,
@@ -53,11 +54,12 @@ void Player::draw(){
 
 void Player::setup(Vec2f pos){
 	player_texture = Texture("res/Texture/chara.png");
-
+	cut_y = 768;
+	fream = 12;
 	player.pos = pos;
-	player.size = Vec2f(140, 190);
+	player.size = Vec2f(95, 190);
 
-	speed = Vec2f(0.8, 23);
+	speed = Vec2f(0.8, 21);
 	player.vec = Vec2f(0, 0);
 	g = 1;
 
@@ -70,13 +72,96 @@ void Player::setup(Vec2f pos){
 	jump_flag = false;
 }
 
-void Player::move(){
+void Player::conditionUpdate(){
 	cut_x = 256;
+	switch (color_abs)
+	{
+	case 0:
+		cut_y = 768;
+		fream = 9;
+		break;
+	case 1:
+		cut_y = 512;
+		fream = 6;
+		break;
+	case 2:
+		cut_y = 256;
+		fream = 3;
+		break;
+	case 3:
+		cut_y = 0;
+		fream = 0;
+		break;
+	}
+}
+
+void Player::move(){
 	dirUpdate(select_dir);
 	//ブロック選択
-	if (select_dir == SELECTDIR::Y ||
-		select_dir == SELECTDIR::NON){
+
+	if (select_dir == SELECTDIR::NON_Y0)
+	{
+		if (env.isPressKey('S') &&
+			(env.isPushKey('D') ||
+			env.isPushKey('A')))
+		{
+			;
+		}
 		if (selection.y() > -2){
+			if (env.isPushKey('W')){
+				selection.y()--;
+			}
+		}
+
+
+	}
+	//std::cout << static_cast<int>(select_dir) << std::endl;
+	if (select_dir == SELECTDIR::NON){
+		if (env.isPressKey('S') &&
+			(env.isPushKey('D') ||
+			env.isPushKey('A')))
+		{
+			;
+		}
+		else if (env.isPushKey('W') &&
+			(env.isPushKey('D') ||
+			env.isPushKey('A')))
+		{
+			;
+		}
+		else if (env.isPushKey('A')){
+			selection.x()--;
+		}
+		else if (env.isPushKey('D')){
+			selection.x()++;
+		}
+		else if (env.isPushKey('S')){
+			selection.y()++;
+		}
+		else	if (env.isPushKey('W')){
+			selection.y()--;
+		}
+
+
+	}
+	if (select_dir == SELECTDIR::NON_Y1)
+	{
+		if (env.isPushKey('W') &&
+			(env.isPushKey('D') ||
+			env.isPushKey('A')))
+		{
+			;
+		}
+
+		if (selection.y() < 4){
+			if (env.isPushKey('S')){
+				selection.y()++;
+			}
+		}
+
+	}
+	if (select_dir == SELECTDIR::Y){
+		if (selection.y() > -3){
 			if (env.isPushKey('W')){
 				selection.y()--;
 			}
@@ -87,8 +172,12 @@ void Player::move(){
 			}
 		}
 	}
-	if (select_dir == SELECTDIR::X ||
-		select_dir == SELECTDIR::NON){
+
+
+
+	if (
+		select_dir == SELECTDIR::NON_Y0 ||
+		select_dir == SELECTDIR::NON_Y1){
 		if (selection.x() > -2){
 			if (env.isPushKey('A')){
 				selection.x()--;
@@ -108,7 +197,7 @@ void Player::move(){
 	else if (env.isPressKey('Z')){
 		animation();
 		player.vec.x() -= speed.x();
-		
+
 
 		if (player.vec.x() < -8){
 			player.vec.x() = -8;
@@ -128,14 +217,14 @@ void Player::move(){
 
 
 	player.pos.x() += player.vec.x();
-	std::cout << player.vec.x() << std::endl;
+
 	if (player.vec.x()*player.vec.x() > 0.01){
 		player.vec.x() *= 0.9;
 	}
 	else{
 		player.vec.x() = 0;
 	}
-	
+
 	//ジャンプ
 	if (player.vec.y() > -3){
 		if (jump_flag == true){
@@ -150,7 +239,7 @@ void Player::move(){
 	if (player.vec.y() >= -25){
 		player.vec.y() -= g;
 	}
-	
+
 }
 
 
@@ -164,7 +253,7 @@ bool Player::suckColor(){
 	return false;
 }
 bool Player::outColor(){
-	if (color_abs >= 0){
+	if (color_abs > 0){
 		if (env.isPushKey('L')){
 			return true;
 		}
@@ -173,22 +262,34 @@ bool Player::outColor(){
 }
 
 void Player::dirUpdate(SELECTDIR& select_dir){
-	if (selection.y() != 0){
+	if (selection.y() != 0 ||
+		selection.y() != -1){
 		select_dir = SELECTDIR::Y;
+	}
+	if ((selection.x() == 0 &&
+		selection.y() == 0) ||
+		(selection.x() == 0 &&
+		selection.y() == -1)){
+		select_dir = SELECTDIR::NON;
 	}
 	if (selection.x() != 0){
 		select_dir = SELECTDIR::X;
 	}
-	if (selection.x() == 0 &&
-		selection.y() == 0){
-		select_dir = SELECTDIR::NON;
+	if (selection.y() == 0 &&
+		selection.x() != 0){
+		select_dir = SELECTDIR::NON_Y0;
+	}
+	if (selection.y() == -1 &&
+		selection.x() != 0){
+		select_dir = SELECTDIR::NON_Y1;
 	}
 }
 
 void Player::animation(){
 	animation_count++;
-	int index = (animation_count / 6) % 3;
-	cut_x = (index)* 256.0f;
+	int index = (animation_count / 6) % 3 + fream;
+	cut_x = (index % 3) * 256.0f;
+	cut_y = (index / 3) * 256.0f;
 }
 
 Object Player::getObject(){
@@ -196,6 +297,7 @@ Object Player::getObject(){
 }
 
 Vec2i Player::getSelect(){
+	std::cout << selection.y() << std::endl;
 	return player_pos() + selection;
 }
 CONDITION Player::getCondition(){
@@ -219,9 +321,9 @@ void Player::addPos(Vec2f add){
 		jump_flag = true;
 		player.vec.y() = 0;
 	}
-    if (add.y() < 0){
-        player.vec.y() = -0.1;
-    }
+	if (add.y() < 0){
+		player.vec.y() = -0.1;
+	}
 	player.pos += add;
 }
 
